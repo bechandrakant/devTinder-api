@@ -9,7 +9,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
       unique: true,
-      trim,
+      trim: true,
       validate(value) {
         if (!validator.isEmail(value)) {
           throw new Error("Invalid email");
@@ -27,8 +27,8 @@ const userSchema = new mongoose.Schema(
     },
     gender: {
       type: String,
-      lowercase,
-      trim,
+      lowercase: true,
+      trim: true,
       validate(value) {
         if (!["male", "female"].includes(value)) {
           throw new Error("Invalid gender");
