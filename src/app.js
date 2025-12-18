@@ -4,11 +4,15 @@ import "dotenv/config";
 import connectDB from "./config/db.js";
 import User from "./models/user.js";
 import bcrypt from "bcrypt";
+import cookieParser from "cookie-parser";
+import jwt from "jsonwebtoken";
+import userAuth from "./middlewares/userAuth.js";
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
+app.use(cookieParser());
 
 const saltRounds = 10;
 
@@ -60,7 +64,18 @@ app.post("/login", async (req, res) => {
       throw new Error("Invalid credentials");
     }
 
+    const token = jwt.sign({ email: user.email }, process.env.JWT_SECRET);
+    res.cookie("token", token);
     res.status(200).send("Login successful");
+  } catch (err) {
+    res.status(400).send({ error: err.message });
+  }
+});
+
+app.get("/profile", userAuth, async (req, res) => {
+  try {
+    const user = req.user;
+    res.status(200).send(user);
   } catch (err) {
     res.status(400).send({ error: err.message });
   }
