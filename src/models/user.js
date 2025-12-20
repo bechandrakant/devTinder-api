@@ -39,6 +39,7 @@ const userSchema = new mongoose.Schema(
     },
     age: { type: Number, min: 18 },
     photoUrl: { type: String, default: "https://picsum.photos/200/300" },
+    skills: { type: [String] },
   },
   { timestamps: true }
 );
